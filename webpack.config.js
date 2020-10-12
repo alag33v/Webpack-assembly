@@ -49,7 +49,7 @@ module.exports = {
 
   // Указываем куда webpack будет складывать результат работы
   output: {
-    filename: filename('js'),
+    filename: 'js/' + filename('js'),
     path: path.resolve(__dirname, 'dist')
   },
 
@@ -79,8 +79,8 @@ module.exports = {
       patterns: [
         {
           from: path.resolve(__dirname, 'app/assets/images/favicon/cat.ico'),
-          to: path.resolve(__dirname, 'dist')
-        }
+          to: path.resolve(__dirname, 'dist/images/favicon')
+        },
       ]
     }),
 
@@ -117,19 +117,41 @@ module.exports = {
               reloadAll: true
             }
           },
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          'resolve-url-loader',
           'sass-loader'
         ]
       },
       {
         test: /\.(jpg|jpeg|png|webp|svg|gif)$/,
         // file-loader – позволяем webpack(у) понимать импорты картинок
-        use: ['file-loader']
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'images'
+            },
+          }
+        ],
       },
       {
         test: /\.(eot|otf|svg|ttf|woff|woff2)$/,
         // file-loader – позволяем webpack(у) понимать импорты шрифтов
-        use: ['file-loader']
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/'
+            }
+          }
+        ]
       },
       {
         test: /\.js$/,
